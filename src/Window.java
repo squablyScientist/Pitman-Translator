@@ -1,9 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Window extends JFrame implements ActionListener{
+
+public class Window extends JFrame{
     final private Dimension d = new Dimension(1000,1000);
 
     public Window(){
@@ -15,11 +14,6 @@ public class Window extends JFrame implements ActionListener{
     }
 
     private void build(){
-        Canvas canv = new Canvas();
-        add(canv);
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) {
 
     }
 }
