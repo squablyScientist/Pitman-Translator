@@ -8,7 +8,7 @@ public class Window extends JFrame{
     public Window(){
         this.setVisible(true);
         this.setSize(d);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         build();
     }
