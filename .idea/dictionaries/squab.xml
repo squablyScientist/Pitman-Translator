@@ -4,6 +4,7 @@
       <w>cmudict</w>
       <w>lexiconpath</w>
       <w>pitman</w>
+      <w>pitmanlexpath</w>
     </words>
   </dictionary>
 </component>
