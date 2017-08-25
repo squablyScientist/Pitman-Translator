@@ -7,7 +7,13 @@ public class TextProc {
 
     //Path to CMULexicon dictionary
     private static final String LEXICONPATH = "src/strokeFiles/cmudict-0.7b.txt";
+
+    //Path to Pitman Lexicon
     private static final String PITMANLEXPATH = "src/strokeFiles/PitmanLex";
+
+    //Path to list of vowel phonemes
+    private static final String VOWELPATH = "src/strokeFiles/vowels";
+    private static List<Character> vowels = new ArrayList<Character>();
     private static Map<String, List<Character>> lexicon;
     private static Map<String, Character> pitmanLex;
 
@@ -37,7 +43,6 @@ public class TextProc {
     }
     /**
      * Entire string to phone arrays
-     *
      * @param s Any string
      * @return An array of arrays that hold the phones for all words within String s
      */
@@ -68,11 +73,13 @@ public class TextProc {
         FileReader fr;
         String line;
 
+        //Try catch for IOException in file reader and buffered reader
         try{
 
             //Map all phonetic symbols to the phonemes in the CMUDictionary
             fr = new FileReader(PITMANLEXPATH);
             br = new BufferedReader(fr);
+
             while((line = br.readLine()) != null){
                 mapPitLex(line);
             }
@@ -81,14 +88,27 @@ public class TextProc {
             fr = new FileReader(LEXICONPATH);
             br = new BufferedReader(fr);
 
-            //get past cmu copyright stuff
+            //get past cmu copyright stuff, need to keep it in file as part of copyright
             for(int i = 0; i < 56; i++){
                 br.readLine();
             }
 
+            //Map all of the words in the CMUdict to phoneme characters.
             while((line = br.readLine()) != null){
                 mapLex(line);
             }
+
+            //add a bunch of vowels into the arraylist to be compared against later
+            fr = new FileReader(VOWELPATH);
+            br = new BufferedReader(fr);
+
+            while((line = br.readLine()) != null){
+                vowels.add(line.charAt(0));
+            }
+
+            br.close();
+            fr.close();
+
         }
         catch(IOException e){
             e.printStackTrace();
@@ -97,7 +117,7 @@ public class TextProc {
 
     /**
      * Maps a word to its correct phones based on one line of the CMU lexicon
-     * @param s String of a word and its phones to be mapped to eachother
+     * @param s String of a word and its phones to be mapped to each other
      */
     private static void mapLex(String s){
         Scanner sc = new Scanner(s);
@@ -119,5 +139,14 @@ public class TextProc {
         String phone = sc.next();
         pitmanLex.put(phone, sc.next().charAt(0));
         System.out.println("Mapped " + phone + " as " + pitmanLex.get(phone));
+    }
+
+    /**
+     * Checks whether or not a phoneme character is a vowel
+     * @param c A phoneme character
+     * @return if c is a vowel phonemes
+     */
+    static boolean isVowel(char c){
+        return vowels.contains(c);
     }
 }
