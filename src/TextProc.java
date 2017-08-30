@@ -8,14 +8,10 @@ public class TextProc {
     //Path to CMULexicon dictionary
     private static final String LEXICONPATH = "src/strokeFiles/cmudict-0.7b.txt";
 
-    //Path to Pitman Lexicon
-    private static final String PITMANLEXPATH = "src/strokeFiles/PitmanLex";
-
     //Path to list of vowel phonemes
     private static final String VOWELPATH = "src/strokeFiles/vowels";
     private static List<Character> vowels = new ArrayList<Character>();
     private static Map<String, List<Character>> lexicon;
-    private static Map<String, Character> pitmanLex;
 
     /**
      * Splits a bunch of words into an array of a bunch of words
@@ -68,22 +64,12 @@ public class TextProc {
      */
      static void load(){
         lexicon = new HashMap<>(133910);
-        pitmanLex = new HashMap<>(84);
         BufferedReader br;
         FileReader fr;
         String line;
 
         //Try catch for IOException in file reader and buffered reader
         try{
-
-            //Map all phonetic symbols to the phonemes in the CMUDictionary
-            fr = new FileReader(PITMANLEXPATH);
-            br = new BufferedReader(fr);
-
-            while((line = br.readLine()) != null){
-                mapPitLex(line);
-            }
-
             //Map all the words in the CMUDictionary to their phonetic symbols
             fr = new FileReader(LEXICONPATH);
             br = new BufferedReader(fr);
@@ -124,21 +110,10 @@ public class TextProc {
         List<Character> phones = new ArrayList<>();
         String word = sc.next();
         while(sc.hasNext()){
-            phones.add(pitmanLex.get(sc.next()));
+            phones.add(sc.next().charAt(0));
         }
         lexicon.put(word, phones);
         System.out.println("Mapped: " + word + " as " + lexicon.get(word));
-    }
-
-    /**
-     * Maps a phoneme to it's phonetic character based on a many to one mapping file
-     * @param s String made up of a phoneme and a phonetic character separated by a space
-     */
-    private static void mapPitLex(String s){
-        Scanner sc = new Scanner(s);
-        String phone = sc.next();
-        pitmanLex.put(phone, sc.next().charAt(0));
-        System.out.println("Mapped " + phone + " as " + pitmanLex.get(phone));
     }
 
     /**
