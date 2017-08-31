@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,7 +14,8 @@ public class TextProc {
 
     //Path to list of vowel phonemes
     private static final String VOWELPATH = "src/strokeFiles/vowels";
-    private static List<Character> vowels = new ArrayList<Character>();
+
+    private static List<Character> vowels = new ArrayList<>();
     private static Map<String, List<Character>> lexicon;
 
     /**
