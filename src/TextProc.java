@@ -1,6 +1,3 @@
-/**
- *
- */
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +12,7 @@ public class TextProc {
     //Path to list of vowel phonemes
     private static final String VOWELPATH = "src/strokeFiles/vowels";
 
-    private static List<Character> vowels = new ArrayList<>();
+    private static Set<Character> vowels = new HashSet<>();
     private static Map<String, List<Character>> lexicon;
 
     /**
@@ -68,43 +65,40 @@ public class TextProc {
      * Runtime loading of lexicon mappings of phonemes, symbols, and (NOT IMPLEMENTED) pitman strokes
      */
      static void load(){
-        lexicon = new HashMap<>(133910);
-        BufferedReader br;
-        FileReader fr;
+        lexicon = new HashMap<>();
         String line;
 
         //Try catch for IOException in file reader and buffered reader
-        try{
+        try(
+                FileReader fr = new FileReader(LEXICONPATH);
+                BufferedReader br = new BufferedReader(fr)) {
             //Map all the words in the CMUDictionary to their phonetic symbols
-            fr = new FileReader(LEXICONPATH);
-            br = new BufferedReader(fr);
+
 
             //get past cmu copyright stuff, need to keep it in file as part of copyright
-            for(int i = 0; i < 56; i++){
+            for (int i = 0; i < 56; i++) {
                 br.readLine();
             }
 
             //Map all of the words in the CMUdict to phoneme characters.
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 mapLex(line);
             }
-
-            //add a bunch of vowels into the arraylist to be compared against later
-            fr = new FileReader(VOWELPATH);
-            br = new BufferedReader(fr);
-
-            while((line = br.readLine()) != null){
-                vowels.add(line.charAt(0));
-            }
-
-            br.close();
-            fr.close();
-
         }
-        catch(IOException e){
-            e.printStackTrace();
+        catch(IOException e){e.printStackTrace();}
+
+        // read in all of the vowel phonemes and keep them in a set.
+        try(FileReader fr = new FileReader(VOWELPATH)) {
+
+            //add a bunch of vowels into the hash set to be compared against later
+            int next;
+             while ((next = fr.read()) != -1) {
+                 vowels.add((char)next);
+             }
         }
-    }
+        catch(IOException e){e.printStackTrace(); }
+     }
+
 
     /**
      * Maps a word to its correct phones based on one line of the CMU lexicon

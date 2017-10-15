@@ -4,12 +4,11 @@ public class Runner {
     public static void main(String[] args) throws IOException {
         TextProc.load();
         Character[][] symbols = TextProc.phones("Colin");
-        for(int i = 0; i< symbols.length; i++){
-            for(int j = 0; j < symbols[i].length; j++){
-                System.out.print(symbols[i][j]);
+        for (Character[] symbol : symbols) {
+            for (Character aSymbol : symbol) {
+                System.out.print(aSymbol);
             }
             System.out.print(" ");
-
         }
     }
 }
