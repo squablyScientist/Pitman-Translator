@@ -1,10 +1,16 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class TextProc {
+/**
+ * This file is responsible for processing all text mapping and loading that must be done. All information required for
+ * such processing is read in at runtime. All methods within the class are meant to be used as a utilities, and thus the
+ * processor should never be instantiated.
+ *
+ *@author Collin Tod
+ */
+public abstract class TextProc {
 
     //Path to CMULexicon dictionary
     private static final String LEXICONPATH = "src/strokeFiles/cmudict-0.7b.txt";
@@ -37,7 +43,6 @@ public class TextProc {
             return phoneList.toArray(new Character[phoneList.size()]);
         }
         throw new IllegalArgumentException("Not in lexicon");
-
     }
     /**
      * Entire string to phone arrays
@@ -69,9 +74,8 @@ public class TextProc {
         String line;
 
         //Try catch for IOException in file reader and buffered reader
-        try(
-                FileReader fr = new FileReader(LEXICONPATH);
-                BufferedReader br = new BufferedReader(fr)) {
+        try(FileReader fr = new FileReader(LEXICONPATH);
+            BufferedReader br = new BufferedReader(fr)) {
             //Map all the words in the CMUDictionary to their phonetic symbols
 
 
@@ -112,7 +116,6 @@ public class TextProc {
             phones.add(sc.next().charAt(0));
         }
         lexicon.put(word, phones);
-        System.out.println("Mapped: " + word + " as " + lexicon.get(word));
     }
 
     /**
