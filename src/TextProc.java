@@ -8,6 +8,10 @@ import java.util.*;
  * such processing is read in at runtime. All methods within the class are meant to be used as a utilities, and thus the
  * processor should never be instantiated.
  *
+ * TODO: Maybe make loading faster somehow?
+ * TODO: Add mapping from a phoneme to a stroke
+ * TODO: Create a Stroke class with relative coordinates for the start of the stroke, the end of the stroke, and vowel positions
+ *
  *@author Collin Tod
  */
 public abstract class TextProc {
