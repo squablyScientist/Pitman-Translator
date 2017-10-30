@@ -22,16 +22,6 @@ public abstract class TextProc {
     private static Map<String, List<Character>> lexicon;
 
     /**
-     * Splits a bunch of words into an array of a bunch of words
-     *
-     * @param s The string of multiple words which will be split into an array of each word
-     * @return An array of strings, each one word of the string s
-     */
-    private static String[] wordsSplit(String s) {
-        return s.split("\\s");
-    }
-
-    /**
      * Grabs the phones of a word from lexicon hashmap, which is populated by the words withing the CMULexicon
      * @param s A word that should be in the CMULexicon
      * @return an array of strings that hold the phones for the word in String s
@@ -50,7 +40,7 @@ public abstract class TextProc {
      * @return An array of arrays that hold the phones for all words within String s
      */
     public static Character[][] phones(String s) {
-        String[] words = wordsSplit(s);
+        String[] words = s.split(" ");
 
         //2d array of characters with one dimension defined as the amount of words in String s
         Character[][] phones = new Character[words.length][];
