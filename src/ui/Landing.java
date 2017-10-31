@@ -14,6 +14,7 @@ import javafx.stage.Stage;
  * TODO: make closing the window do something different than the enter button
  * TODO: make the whole thing look nicer
  * TODO: Add initial size for the stage
+ * TODO: move setup to init()
  * TODO: Document
  *
  * @author Collin Tod
