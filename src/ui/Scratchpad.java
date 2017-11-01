@@ -1,12 +1,14 @@
 package ui;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
  * TODO: maybe change to every time a character is pressed? need to see how this performs first.
  * TODO: implement the actual shorthand writing
  * TODO: make this adhere to MVC
+ * TODO: document
  *
  * @author Collin Tod
  */
@@ -30,9 +33,10 @@ public class Scratchpad extends Application {
     public void init() throws Exception {
         txtField = new TextField();
         pane = new BorderPane();
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-        //TODO: make sure this initializes with correct dimensions
-        canvas = new Canvas(1000,1000);
+        // Initialize a canvas that is half the size of the screen
+        canvas = new Canvas(screenBounds.getWidth()/2,screenBounds.getHeight()/2);
         gc =  canvas.getGraphicsContext2D();
         pane.setCenter(canvas);
         pane.setBottom(txtField);
