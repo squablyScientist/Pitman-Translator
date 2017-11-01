@@ -1,3 +1,4 @@
+// FIXME make this not centered around the landing page since only one application can be on a JFX thread at a time
 package ui;
 
 import javafx.application.Application;
