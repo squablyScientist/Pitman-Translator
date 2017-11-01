@@ -1,3 +1,4 @@
+//FIXME: There can only be one Application thread running on a JVM at a time, therefore this should be implemented as a Scene rather than an entire new Application
 package ui;
 
 import javafx.application.Application;
