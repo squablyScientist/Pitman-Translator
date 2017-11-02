@@ -1,5 +1,4 @@
 //FIXME: There can only be one Application thread running on a JVM at a time, therefore this should be implemented as a Scene rather than an entire new Application
-package ui;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -32,6 +31,9 @@ public class Scratchpad extends Application {
 
     @Override
     public void init() throws Exception {
+
+        //Load the image files for all of the
+        TextProc.loadImages();
         txtField = new TextField();
         pane = new BorderPane();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -59,11 +61,12 @@ public class Scratchpad extends Application {
     public void start(Stage primaryStage) throws Exception {
         Scene translation = new Scene(pane);
         primaryStage.setScene(translation);
+
         //TODO: make this say something other than 'TEST'
         gc.drawImage(new Image("strokeFiles/strokes/Tee.png"), 10, 10);
         gc.drawImage(new Image("strokeFiles/strokes/Ess.png"), 25, 75);
         gc.drawImage(new Image("strokeFiles/strokes/Tee.png"), 10, 135);
-
+        gc.drawImage(TextProc.strokeMap.get('R').getImage(), 100, 100);
         primaryStage.setTitle("'TEST'");
         primaryStage.show();
     }

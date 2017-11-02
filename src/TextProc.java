@@ -26,7 +26,7 @@ public abstract class TextProc {
 
     private static final String STROKECHARPATH = "src/strokeFiles/strokeCharacters";
     private static Set<Character> vowels = new HashSet<>();
-    private static Map<Character, Stroke> strokeMap = new HashMap<>();
+    static Map<Character, Stroke> strokeMap = new HashMap<>();
     private static Map<String, List<Character>> lexicon;
 
     /**
@@ -104,7 +104,17 @@ public abstract class TextProc {
         //TODO: make this graceful
         catch(IOException e){e.printStackTrace(); }
 
-        // Map characters to new strokes
+
+     }
+
+    /**
+     * Maps all phoneme characters to a Stroke object based on a configuration file at {@code STROKECHARPATH}. The file
+     * follows the following format for(Each line is a new mapping):
+     * phonemeCharacter imageFilePath startx starty endx endy
+     */
+    static void loadImages(){
+        String line;
+         // Map characters to new strokes
         try(FileReader fr = new FileReader(STROKECHARPATH);
             BufferedReader br = new BufferedReader(fr)){
             while((line = br.readLine()) != null){
@@ -114,11 +124,9 @@ public abstract class TextProc {
 
         //TODO: make this graceful
         catch (IOException e){
-                e.printStackTrace();
+            e.printStackTrace();
         }
-     }
-
-
+    }
 
     /**
      * Maps a word to its correct phones based on one line of the CMU lexicon
@@ -144,8 +152,10 @@ public abstract class TextProc {
         return vowels.contains(c);
     }
 
+
     private static void mapStrokes(String line) {
         //TODO: add check to make sure that the file format is valid
+        //TODO: maybe make this only map to filenames? have to see how fast / slow that would be when rendering first
         String[] words = line.split(" ");
         char phoneme = words[0].charAt(0);
         String strokeFileName = words[1];
