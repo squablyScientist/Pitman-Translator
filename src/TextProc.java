@@ -23,7 +23,8 @@ public abstract class TextProc {
 
     //Path to list of vowel phonemes
     private static final String VOWELPATH = "src/strokeFiles/vowels";
-
+    
+    //Path to the mappings from phoneme characters to Strokes
     private static final String STROKECHARPATH = "src/strokeFiles/strokeCharacters";
     private static Set<Character> vowels = new HashSet<>();
     static Map<Character, Stroke> strokeMap = new HashMap<>();
