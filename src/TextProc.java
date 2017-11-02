@@ -23,6 +23,7 @@ public abstract class TextProc {
     private static final String VOWELPATH = "src/strokeFiles/vowels";
 
     private static Set<Character> vowels = new HashSet<>();
+    private static Map<Character, Stroke>;
     private static Map<String, List<Character>> lexicon;
 
     /**
@@ -119,5 +120,9 @@ public abstract class TextProc {
      */
     static boolean isVowel(char c){
         return vowels.contains(c);
+    }
+
+    private static void mapStrokes(){
+
     }
 }
