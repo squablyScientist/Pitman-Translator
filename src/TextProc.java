@@ -1,7 +1,9 @@
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 /**
  * This file is responsible for processing all text mapping and loading that must be done. All information required for
@@ -22,8 +24,9 @@ public abstract class TextProc {
     //Path to list of vowel phonemes
     private static final String VOWELPATH = "src/strokeFiles/vowels";
 
+    private static final String STROKECHARPATH = "src/strokeFiles/strokeCharacters";
     private static Set<Character> vowels = new HashSet<>();
-    private static Map<Character, Stroke>;
+    private static Map<Character, Stroke> strokeMap = new HashMap<>();
     private static Map<String, List<Character>> lexicon;
 
     /**
@@ -84,6 +87,8 @@ public abstract class TextProc {
                 mapLex(line);
             }
         }
+
+        //TODO: make this graceful
         catch(IOException e){e.printStackTrace();}
 
         // read in all of the vowel phonemes and keep them in a set.
@@ -95,8 +100,24 @@ public abstract class TextProc {
                  vowels.add((char)next);
              }
         }
+
+        //TODO: make this graceful
         catch(IOException e){e.printStackTrace(); }
+
+        // Map characters to new strokes
+        try(FileReader fr = new FileReader(STROKECHARPATH);
+            BufferedReader br = new BufferedReader(fr)){
+            while((line = br.readLine()) != null){
+                mapStrokes(line);
+            }
+        }
+
+        //TODO: make this graceful
+        catch (IOException e){
+                e.printStackTrace();
+        }
      }
+
 
 
     /**
@@ -104,6 +125,7 @@ public abstract class TextProc {
      * @param s String of a word and its phones to be mapped to each other
      */
     private static void mapLex(String s){
+        //TODO: redo this with string splitting
         Scanner sc = new Scanner(s);
         List<Character> phones = new ArrayList<>();
         String word = sc.next();
@@ -122,7 +144,21 @@ public abstract class TextProc {
         return vowels.contains(c);
     }
 
-    private static void mapStrokes(){
+    private static void mapStrokes(String line) {
+        //TODO: add check to make sure that the file format is valid
+        String[] words = line.split(" ");
+        char phoneme = words[0].charAt(0);
+        String strokeFileName = words[1];
+        int x1 = Integer.parseInt(words[2]);
+        int y1 = Integer.parseInt(words[3]);
+        int x2 = Integer.parseInt(words[4]);
+        int y2 = Integer.parseInt(words[5]);
 
+        Point start = new Point(x1, y1);
+        Point end = new Point (x2, y2);
+
+        Stroke stroke = new Stroke(strokeFileName, start, end);
+
+        strokeMap.put(phoneme, stroke);
     }
 }
