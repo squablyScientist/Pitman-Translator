@@ -37,7 +37,7 @@ public class Scratchpad extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         // Initialize a canvas that is half the size of the screen
-        Canvas canvas = new Canvas(screenBounds.getWidth(),screenBounds.getHeight() -100);
+        Canvas canvas = new Canvas(screenBounds.getWidth(),screenBounds.getHeight() - 50);
         GraphicsContext gc =  canvas.getGraphicsContext2D();
         pane.setCenter(canvas);
         pane.setBottom(txtField);
