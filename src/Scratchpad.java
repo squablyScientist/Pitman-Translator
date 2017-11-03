@@ -25,65 +25,25 @@ import java.util.concurrent.TransferQueue;
  * @author Collin Tod
  */
 public class Scratchpad extends Application {
-    TextField txtField;
     BorderPane pane;
-    Canvas canvas;
-    GraphicsContext gc;
 
     @Override
     public void init() throws Exception {
 
         //Load the image files for all of the
         TextProc.loadImages();
-        txtField = new TextField();
+        TextField txtField = new TextField();
         pane = new BorderPane();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         // Initialize a canvas that is half the size of the screen
-        canvas = new Canvas(screenBounds.getWidth(),screenBounds.getHeight() -100);
-        gc =  canvas.getGraphicsContext2D();
+        Canvas canvas = new Canvas(screenBounds.getWidth(),screenBounds.getHeight() -100);
+        GraphicsContext gc =  canvas.getGraphicsContext2D();
         pane.setCenter(canvas);
         pane.setBottom(txtField);
 
-        //TODO: make this understand shorthand better, and maybe move the whole thing to its own method since it'll be so long
-        // Event handler for the text field. The action is triggered when ENTER is pressed within the textfield
-        txtField.setOnAction(event -> {
-
-            // Clear all of the previous drawings
-            gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
-
-
-            Character[][] phones = TextProc.phones(txtField.getText());
-            int x = 0;
-            int y;
-            Stroke current;
-
-            //Iterate through the sentence
-            for (Character[] word : phones) {
-
-                // Iterate through the word
-                for (Character c : word) {
-
-                    // Don't bother with the vowels yet, only draw outlines.
-                    if (!TextProc.isVowel(c)) {
-                        current = TextProc.strokeMap.get(c);
-
-                        // Move the image over 80 px
-                        x += 80;
-
-                        // Calculate which line the image should be on
-                        y = 80 * (x / (int) screenBounds.getWidth());
-
-                        // Draw the image
-                        gc.drawImage(current.getImage(), Math.round((x) % screenBounds.getWidth()), y);
-                    }
-                }
-
-                // Put 80 pixels in between words to fo indicate a space until joining is funtioning
-                x += 80;
-            }
-
-        });
+        // Event handler for the text field. The action is triggered whenever ENTER key is pressed
+        txtField.setOnAction(event -> { drawStrokes(txtField.getText(), gc); });
     }
 
     @Override
@@ -97,5 +57,50 @@ public class Scratchpad extends Application {
         primaryStage.setScene(translation);
         primaryStage.setTitle("'TEST'");
         primaryStage.show();
+    }
+
+    //TODO: make this understand shorthand better, and maybe move the whole thing to its own method since it'll be so long
+    /**
+     * Draws out the all of the phonemes in stroke form on the canvas of the Application.
+     *
+     * @param s The string that is to be split up and put into phonemes, and then drawn out.
+     */
+    private void drawStrokes(String s, GraphicsContext gc){
+
+        Canvas canvas = gc.getCanvas();
+        // Clear all of the previous drawings
+        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+
+
+        Character[][] phones = TextProc.phones(s);
+        int x = 0;
+        int y;
+        Stroke current;
+
+        //Iterate through the sentence
+        for (Character[] word : phones) {
+
+            // Iterate through the word
+            for (Character c : word) {
+
+                // Don't bother with the vowels yet, only draw outlines.
+                if (!TextProc.isVowel(c)) {
+                    current = TextProc.strokeMap.get(c);
+
+                    // Move the image over 80 px
+                    x += 80;
+
+                    // Calculate which line the image should be on
+                    y = 80 * (x / (int) canvas.getWidth());
+
+                    // Draw the image
+                    gc.drawImage(current.getImage(), Math.round((x) % canvas.getWidth()), y);
+                }
+            }
+
+            // Put 80 pixels in between words to fo indicate a space until joining is funtioning
+            x += 80;
+        }
+
     }
 }
