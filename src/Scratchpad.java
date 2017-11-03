@@ -43,7 +43,7 @@ public class Scratchpad extends Application {
         pane.setBottom(txtField);
 
         // Event handler for the text field. The action is triggered whenever ENTER key is pressed
-        txtField.setOnAction(event -> { drawStrokes(txtField.getText(), gc); });
+        txtField.setOnAction(event -> drawStrokes(txtField.getText(), gc));
     }
 
     @Override
