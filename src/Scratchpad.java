@@ -48,34 +48,41 @@ public class Scratchpad extends Application {
         //TODO: make this understand shorthand better, and maybe move the whole thing to its own method since it'll be so long
         // Event handler for the text field. The action is triggered when ENTER is pressed within the textfield
         txtField.setOnAction(event -> {
+
+            // Clear all of the previous drawings
+            gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+
+
             Character[][] phones = TextProc.phones(txtField.getText());
             int x = 0;
             int y;
             Stroke current;
+
             //Iterate through the sentence
-            for(Character[] word : phones){
+            for (Character[] word : phones) {
 
                 // Iterate through the word
-                for(Character c : word){
+                for (Character c : word) {
 
                     // Don't bother with the vowels yet, only draw outlines.
-                    if(!TextProc.isVowel(c)) {
+                    if (!TextProc.isVowel(c)) {
                         current = TextProc.strokeMap.get(c);
 
                         // Move the image over 80 px
                         x += 80;
 
                         // Calculate which line the image should be on
-                        y = 80 * (x / (int)screenBounds.getWidth());
+                        y = 80 * (x / (int) screenBounds.getWidth());
 
                         // Draw the image
-                        gc.drawImage(current.getImage(), (int)Math.round((x) % screenBounds.getWidth()), y);
+                        gc.drawImage(current.getImage(), Math.round((x) % screenBounds.getWidth()), y);
                     }
                 }
 
                 // Put 80 pixels in between words to fo indicate a space until joining is funtioning
-                x+=80;
+                x += 80;
             }
+
         });
     }
 

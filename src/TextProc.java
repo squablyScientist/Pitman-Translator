@@ -11,8 +11,7 @@ import java.util.List;
  * processor should never be instantiated.
  *
  * TODO: Maybe make loading faster somehow?
- * TODO: Add mapping from a phoneme to a stroke
- * TODO: Create a Stroke class with relative coordinates for the start of the stroke, the end of the stroke, and vowel positions
+ * TODO: add punctuation handling
  *
  *@author Collin Tod
  */
@@ -26,10 +25,17 @@ public abstract class TextProc {
 
     //Path to the mappings from phoneme characters to Strokes
     private static final String STROKECHARPATH = "src/strokeFiles/strokeCharacters";
+
+    // Set of phonemes that are considered vowels and thus are to be drawn differently
     private static Set<Character> vowels = new HashSet<>();
+
+    // Mapping of a phoneme to its stroke. Based on the strokeFiles/strokeCharacters file.
     static Map<Character, Stroke> strokeMap = new HashMap<>();
+
+    // Mapping of English words to phonemes.
     private static Map<String, List<Character>> lexicon;
 
+    //TODO: make this not throw an exception if the word isn't in the lexicon. This messes up dynamic updating
     /**
      * Grabs the phones of a word from lexicon hashmap, which is populated by the words withing the CMULexicon
      * @param s A word that should be in the CMULexicon
@@ -57,9 +63,11 @@ public abstract class TextProc {
         for (int i = 0; i < phones.length; i++) {
             try {
                 phones[i] = getWordSymbols(words[i]);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+            }
 
+            //TODO: figure out how to make this only return if the character is in the lexicon, this is not good practice
+            catch (IllegalArgumentException e) {
+                //Do nothing
             }
         }
         return phones;
