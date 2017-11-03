@@ -1,5 +1,3 @@
-//FIXME: There can only be one Application thread running on a JVM at a time, therefore this should be implemented as a Scene rather than an entire new Application
-
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -10,6 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import javax.xml.soap.Text;
+import java.util.concurrent.TransferQueue;
 
 /**
  * This is where the user will enter their text, and where the resulting shorthand will be displayed. The user enters
@@ -39,16 +40,42 @@ public class Scratchpad extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         // Initialize a canvas that is half the size of the screen
-        canvas = new Canvas(screenBounds.getWidth()/2,screenBounds.getHeight()/2);
+        canvas = new Canvas(screenBounds.getWidth(),screenBounds.getHeight() -100);
         gc =  canvas.getGraphicsContext2D();
         pane.setCenter(canvas);
         pane.setBottom(txtField);
 
+        //TODO: make this understand shorthand better, and maybe move the whole thing to its own method since it'll be so long
         // Event handler for the text field. The action is triggered when ENTER is pressed within the textfield
         txtField.setOnAction(event -> {
-            // TODO: Grab the necessary phonemes, their paired strokes
-            // TODO: Then clear the canvas and repaint the correct shorthand
-            // TODO: add some way for the user to toggle whether or not the shorthand renders instantly or not
+            Character[][] phones = TextProc.phones(txtField.getText());
+            int x = 0;
+            int y;
+            Stroke current;
+            //Iterate through the sentence
+            for(Character[] word : phones){
+
+                // Iterate through the word
+                for(Character c : word){
+
+                    // Don't bother with the vowels yet, only draw outlines.
+                    if(!TextProc.isVowel(c)) {
+                        current = TextProc.strokeMap.get(c);
+
+                        // Move the image over 80 px
+                        x += 80;
+
+                        // Calculate which line the image should be on
+                        y = 80 * (x / (int)screenBounds.getWidth());
+
+                        // Draw the image
+                        gc.drawImage(current.getImage(), (int)Math.round((x) % screenBounds.getWidth()), y);
+                    }
+                }
+
+                // Put 80 pixels in between words to fo indicate a space until joining is funtioning
+                x+=80;
+            }
         });
     }
 
@@ -61,12 +88,6 @@ public class Scratchpad extends Application {
     public void start(Stage primaryStage) throws Exception {
         Scene translation = new Scene(pane);
         primaryStage.setScene(translation);
-
-        //TODO: make this say something other than 'TEST'
-        gc.drawImage(new Image("strokeFiles/strokes/Tee.png"), 10, 10);
-        gc.drawImage(new Image("strokeFiles/strokes/Ess.png"), 25, 75);
-        gc.drawImage(new Image("strokeFiles/strokes/Tee.png"), 10, 135);
-        gc.drawImage(TextProc.strokeMap.get('R').getImage(), 100, 100);
         primaryStage.setTitle("'TEST'");
         primaryStage.show();
     }

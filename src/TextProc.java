@@ -23,7 +23,7 @@ public abstract class TextProc {
 
     //Path to list of vowel phonemes
     private static final String VOWELPATH = "src/strokeFiles/vowels";
-    
+
     //Path to the mappings from phoneme characters to Strokes
     private static final String STROKECHARPATH = "src/strokeFiles/strokeCharacters";
     private static Set<Character> vowels = new HashSet<>();
@@ -36,7 +36,7 @@ public abstract class TextProc {
      * @return an array of strings that hold the phones for the word in String s
      * @throws IllegalArgumentException If the word given is not in the CXMULexicon, then an illegeal argument exception is thrown
      */
-    private static Character[] getWordSymbols(String s) throws IllegalArgumentException{
+    static Character[] getWordSymbols(String s) throws IllegalArgumentException{
         List<Character> phoneList;
         if((phoneList = lexicon.get(s.toUpperCase())) != null){
             return phoneList.toArray(new Character[phoneList.size()]);
@@ -165,6 +165,7 @@ public abstract class TextProc {
         int x2 = Integer.parseInt(words[4]);
         int y2 = Integer.parseInt(words[5]);
 
+        // Create the points that mark the start and the end of a stroke so they can be chained together.
         Point start = new Point(x1, y1);
         Point end = new Point (x2, y2);
 
