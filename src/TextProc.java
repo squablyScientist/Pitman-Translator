@@ -37,17 +37,20 @@ public abstract class TextProc {
 
     //TODO: make this not throw an exception if the word isn't in the lexicon. This messes up dynamic updating
     /**
-     * Grabs the phones of a word from lexicon hashmap, which is populated by the words withing the CMULexicon
+     * Translates a String into an array of characters that represent the phonemes of the word in the String. If the
+     * string is not in {@link TextProc#lexicon}, then an empty Character array is returned.
+     *
      * @param s A word that should be in the CMULexicon
-     * @return an array of strings that hold the phones for the word in String s
-     * @throws IllegalArgumentException If the word given is not in the CXMULexicon, then an illegeal argument exception is thrown
+     * @return an array of characters that hold the phonemes for the word in String s, or an empty character array if
+     * s is not in {@link TextProc#lexicon}.
      */
-    static Character[] getWordSymbols(String s) throws IllegalArgumentException{
+    private static Character[] getWordSymbols(String s) throws IllegalArgumentException{
         List<Character> phoneList;
-        if((phoneList = lexicon.get(s.toUpperCase())) != null){
-            return phoneList.toArray(new Character[phoneList.size()]);
-        }
-        throw new IllegalArgumentException("Not in lexicon");
+
+        // Retrieves the list of phonemes from the lexicon, if the word isn't there then it is set to an empty list
+        phoneList = lexicon.getOrDefault(s.toUpperCase(), Collections.emptyList());
+
+        return phoneList.toArray(new Character[phoneList.size()]);
     }
     /**
      * Entire string to phone arrays
