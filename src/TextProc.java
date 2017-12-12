@@ -184,4 +184,22 @@ public abstract class TextProc {
 
         strokeMap.put(phoneme, stroke);
     }
+
+    public static char previousConsonant(Character[] word, int index){
+        do{
+            index -= 1;
+        }
+        while(isVowel(word[index]) && index > 0);
+
+        return word[index];
+    }
+
+    public static boolean hasConsonant(Character[] word){
+        for(Character c : word){
+            if(!isVowel(c)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

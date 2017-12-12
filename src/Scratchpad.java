@@ -10,6 +10,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javax.xml.soap.Text;
+import java.awt.*;
 import java.util.concurrent.TransferQueue;
 
 /**
@@ -26,6 +27,7 @@ import java.util.concurrent.TransferQueue;
  */
 public class Scratchpad extends Application {
     BorderPane pane;
+    private final int SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
 
     @Override
     public void init() throws Exception {
@@ -69,38 +71,50 @@ public class Scratchpad extends Application {
     private void drawStrokes(String s, GraphicsContext gc){
 
         Canvas canvas = gc.getCanvas();
-        // Clear all of the previous drawings
+
+        // Clears all of the previous drawings
         gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
 
 
         Character[][] phones = TextProc.phones(s);
-        int x = 0;
-        int y;
+        int x = 90;
+        int y = 90;
+        int line = 1;
         Stroke current;
 
-        //Iterate through the sentence
+        //Iterates through the sentence
         for (Character[] word : phones) {
 
-            // Iterate through the word
+            // Checks to see if it is necessary to wrap at the word. The on the end is for padding
+            if((SCREENWIDTH - 90)  - x < GraphicsCalculations.wordLength(word)){
+                line++;
+                x = 80;
+                y = line * 80;
+            }
+
+            // Iterates through the word
             for (Character c : word) {
 
                 // Don't bother with the vowels yet, only draw outlines.
                 if (!TextProc.isVowel(c)) {
                     current = TextProc.strokeMap.get(c);
 
-                    // Move the image over 80 px
-                    x += 80;
-
-                    // Calculate which line the image should be on
-                    y = 80 * (x / (int) canvas.getWidth());
+                    // The starting and ending points of the current stroke
+                    Point start = current.getStart();
+                    Point end = current.getEnd();
 
                     // Draw the image
-                    gc.drawImage(current.getImage(), Math.round((x) % canvas.getWidth()), y);
+                    gc.drawImage(current.getImage(), x - start.x, y - start.y);
+
+                    // Moves the pointer to the end of the stroke
+                    x += end.x - start.x;
+                    y += end.y - start.y;
                 }
             }
 
-            // Put 80 pixels in between words to fo indicate a space until joining is funtioning
+            // Puts 80 pixels in between words to fo indicate a space until joining is funtioning
             x += 80;
+            y = line*80;
         }
 
     }
