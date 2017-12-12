@@ -26,26 +26,31 @@ import java.util.concurrent.TransferQueue;
  * @author Collin Tod
  */
 public class Scratchpad extends Application {
-    BorderPane pane;
-    private final int SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
+    private BorderPane pane;
+    private Canvas canvas;
+    private TextField txtField;
 
     @Override
     public void init() throws Exception {
 
         //Load the image files for all of the
         TextProc.loadImages();
-        TextField txtField = new TextField();
+        txtField = new TextField();
         pane = new BorderPane();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         // Initialize a canvas that is half the size of the screen
-        Canvas canvas = new Canvas(screenBounds.getWidth(),screenBounds.getHeight() - 50);
+        canvas = new Canvas(screenBounds.getWidth() / 2,screenBounds.getHeight() / 2);
+
         GraphicsContext gc =  canvas.getGraphicsContext2D();
+
+
         pane.setCenter(canvas);
         pane.setBottom(txtField);
 
         // Event handler for the text field. The action is triggered whenever ENTER key is pressed
         txtField.setOnKeyReleased(event -> drawStrokes(txtField.getText(), gc));
+
     }
 
     @Override
@@ -59,6 +64,8 @@ public class Scratchpad extends Application {
         primaryStage.setScene(translation);
         primaryStage.setTitle("'TEST'");
         primaryStage.show();
+        primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue() - 100)));
+        primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue() - 100)));
     }
 
     //TODO: make this understand shorthand better, and maybe move the whole thing to its own method since it'll be so long
@@ -78,7 +85,7 @@ public class Scratchpad extends Application {
 
         Character[][] phones = TextProc.phones(s);
         int x = 90;
-        int y = 90;
+        int y = 100;
         int line = 1;
         Stroke current;
 
@@ -86,36 +93,41 @@ public class Scratchpad extends Application {
         for (Character[] word : phones) {
 
             // Checks to see if it is necessary to wrap at the word. The on the end is for padding
-            if((SCREENWIDTH - 90)  - x < GraphicsCalculations.wordLength(word)){
+            if((canvas.getWidth() - 90)  - x < GraphicsCalculations.wordLength(word)){
                 line++;
                 x = 80;
                 y = line * 80;
             }
 
+            y -= GraphicsCalculations.wordHeight(word);
             // Iterates through the word
             for (Character c : word) {
 
                 // Don't bother with the vowels yet, only draw outlines.
-                if (!TextProc.isVowel(c)) {
-                    current = TextProc.strokeMap.get(c);
-
-                    // The starting and ending points of the current stroke
-                    Point start = current.getStart();
-                    Point end = current.getEnd();
-
-                    // Draw the image
-                    gc.drawImage(current.getImage(), x - start.x, y - start.y);
-
-                    // Moves the pointer to the end of the stroke
-                    x += end.x - start.x;
-                    y += end.y - start.y;
+                if (TextProc.isVowel(c)){
+                    continue;
                 }
+
+                current = TextProc.strokeMap.get(c);
+
+                // The starting and ending points of the current stroke
+                Point start = current.getStart();
+                Point end = current.getEnd();
+
+                // Draw the image
+                gc.drawImage(current.getImage(), x - start.x, y - start.y);
+
+                // Moves the pointer to the end of the stroke
+                x += end.x - start.x;
+                y += end.y - start.y;
+
             }
 
             // Puts 80 pixels in between words to fo indicate a space until joining is funtioning
             x += 80;
-            y = line*80;
+            y = line * 100;
         }
 
     }
+
 }
