@@ -97,4 +97,14 @@ public class Stroke {
     public void setEnd(int x, int y){
        this.end.setLocation(x, y);
     }
+
+    /**
+     * Gets the horizontal span of a stroke.
+     *
+     * @return the x coordinate of the ending point minus the x coordinate of the y coordinate
+     */
+    public int getLength(){
+        return end.x - start.x;
+    }
+
 }
