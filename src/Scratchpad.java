@@ -70,6 +70,7 @@ public class Scratchpad extends Application {
 
     //TODO: make this understand shorthand better, and maybe move the whole thing to its own method since it'll be so long
     //TODO: add joining logic
+    //TODO: Scale words to fit on lines, or scale lines so that words don't overlap
     /**
      * Draws out the all of the phonemes in stroke form on the canvas of the Application.
      *
